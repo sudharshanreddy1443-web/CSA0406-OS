@@ -19,13 +19,14 @@ Question 1
    STOP
 
 Question 2
-(a) List the system calls required for file creation, writing, reading, and closing.
+(a) The system calls required for file creation, writing, reading, and closing.
 Operation	       System Call
 File Creation	   open() (with create flag)
 File Writing	   write()
 File Reading	   read()
 File Closing	   close()
-(b) open() – Opens an existing file or creates a new file.
+(b) 
+open() – Opens an existing file or creates a new file.
 write() – Writes data into the file.
 (c) Pseudocode:
   START
@@ -35,12 +36,13 @@ write() – Writes data into the file.
   STOP
 
 Question 3
-(a) List the system calls required to complete this operation.
+(a) The system calls required to complete this operation.
 open() – Opens the source and destination files.
 read() – Reads data from the source file.
 write() – Writes data to the destination file.
 close() – Closes both files after the copy operation.
-(b) read() – Reads data from the source file.
+(b) 
+read() – Reads data from the source file.
 write() – Writes the read data into the destination file.
 (c) Pseudocode:
   START
