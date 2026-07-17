@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int main()
+{
+    int fd = open("file.txt", O_CREAT | O_RDWR, 0644);
+    char msg[] = "Hi", buf[3];
+
+    write(fd, msg, 2);
+    lseek(fd, 0, 0);
+    read(fd, buf, 2);
+    buf[2] = '\0';
+
+    printf("%s", buf);
+
+    close(fd);
+    return 0;
+}

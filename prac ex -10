@@ -1,0 +1,13 @@
+#include <stdio.h>
+#include <sys/stat.h>
+
+int main()
+{
+    struct stat f;
+
+    stat("student.txt", &f);
+
+    printf("Size = %ld\n", f.st_size);
+
+    return 0;
+}

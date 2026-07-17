@@ -1,0 +1,16 @@
+#include <fcntl.h>
+#include <unistd.h>
+
+int main()
+{
+    char ch;
+    int s = open("source.txt", O_RDONLY);
+    int d = open("destination.txt", O_CREAT | O_WRONLY, 0777);
+
+    while(read(s, &ch, 1) > 0)
+        write(d, &ch, 1);
+
+    close(s);
+    close(d);
+    return 0;
+}

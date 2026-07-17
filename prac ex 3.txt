@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+int main()
+{
+    int q[5], front = 0, rear = -1, i;
+
+    for(i = 1; i <= 3; i++)
+        q[++rear] = i;
+
+    printf("Ready Queue:\n");
+
+    while(front <= rear)
+        printf("Process P%d\n", q[front++]);
+
+    return 0;
+}

@@ -1,0 +1,16 @@
+#include <stdio.h>
+
+int main()
+{
+    int p[] = {1, 2, 3, 1, 4}, f[3], i;
+
+    for(i = 0; i < 3; i++)
+        f[i] = p[i];
+
+    printf("Frames:\n");
+
+    for(i = 0; i < 3; i++)
+        printf("%d ", f[i]);
+
+    return 0;
+}

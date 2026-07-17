@@ -1,0 +1,11 @@
+#include <stdio.h>
+
+int main()
+{
+    int p[] = {1, 2, 3}, i;
+
+    for(i = 0; i < 3; i++)
+        printf("Executing Process P%d\n", p[i]);
+
+    return 0;
+}
