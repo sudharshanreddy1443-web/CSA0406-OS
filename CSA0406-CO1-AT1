@@ -1,1 +1,74 @@
+Question 1
+  (a) Type of Operating System: Multi-user Operating System
+      Justification: It allows many students to use the same Linux server at the same time while keeping each user's programs and files separate.
+  (b) Process Scheduling – Decides which process gets the CPU to run.
+      Memory Management – Allocates and manages memory for each process safely.
+  (c) Pseudocode:
+    START
+      Create a child process using fork()
+      IF child process is created THEN
+      Display "Child Process ID"
+      Display "Parent Process ID"
+    ELSE
+      Display "Parent Process ID"
+      Display "Child Process ID"
+    END IF
+   STOP
 
+Question 2
+(a) List the system calls required for file creation, writing, reading, and closing.
+Operation	       System Call
+File Creation	   open() (with create flag)
+File Writing	   write()
+File Reading	   read()
+File Closing	   close()
+(b) open() – Opens an existing file or creates a new file.
+write() – Writes data into the file.
+(c) Pseudocode:
+  START
+    Open or create "student.txt"
+    Write "Student Name: Rahul" into the file
+    Close the file
+  STOP
+
+Question 3
+(a) List the system calls required to complete this operation.
+open()
+read()
+write()
+close()
+(b) read() – Reads data from the source file.
+write() – Writes the read data into the destination file.
+(c) Pseudocode:
+  START
+    Open source file
+    Open destination file
+    Read data from source file
+    Write data to destination file
+    Close both files
+ STOP
+
+Question 4
+(a) fork() – Creates a new child process.
+exec() – Replaces the current process with a new program.
+(b) wait() – Makes the parent process wait until the child process finishes execution.
+(c) Pseudocode:
+START
+  Create child process using fork()
+  IF Child Process THEN
+  Execute new program using exec()
+ELSE
+  Wait for child process using wait()
+END IF
+STOP
+
+Question 5
+(a) File management helps the operating system store, organize, retrieve, and protect files efficiently on secondary memory.
+(b) open() – Opens a file so it can be read from or written to.
+close() – Closes the file after use and releases system resources.
+(c) Pseudocode:
+ START
+  Open the file
+  Read the file contents
+  Close the file
+ STOP
