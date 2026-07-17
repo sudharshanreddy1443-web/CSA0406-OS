@@ -1,3 +1,6 @@
+Vennapusa Sudharshan Reddy
+192471051
+
 Question 1
   (a) Type of Operating System: Multi-user Operating System
       Justification: It allows many students to use the same Linux server at the same time while keeping each user's programs and files separate.
@@ -33,10 +36,10 @@ write() – Writes data into the file.
 
 Question 3
 (a) List the system calls required to complete this operation.
-open()
-read()
-write()
-close()
+open() – Opens the source and destination files.
+read() – Reads data from the source file.
+write() – Writes data to the destination file.
+close() – Closes both files after the copy operation.
 (b) read() – Reads data from the source file.
 write() – Writes the read data into the destination file.
 (c) Pseudocode:
