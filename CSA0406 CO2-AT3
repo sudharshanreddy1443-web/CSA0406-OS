@@ -1,0 +1,77 @@
+V.Sudharshan Reddy
+192471051
+
+Q1. Deadlock Debugging
+Condition causing deadlock:
+P1 locks R1 and waits for R2.
+P2 locks R2 and waits for R1.
+Both wait for each other forever (Circular Wait), causing deadlock.
+
+Optimization:
+Follow a fixed resource ordering.
+Example: Both processes should always lock R1 first, then R2.
+This removes circular wait and prevents deadlock.
+
+Result: Circular wait is removed, so deadlock cannot occur.
+
+Q2. CPU Utilization Problem
+Cause:
+Processes repeatedly change from Ready → Waiting → Ready due to frequent I/O operations.
+CPU remains idle while processes wait for I/O, resulting in low CPU utilization.
+
+Optimization:
+Increase CPU-I/O overlap using multiprogramming.
+Improve scheduling (Round Robin/MLFQ) and reduce unnecessary waiting.
+
+Result
+Better CPU utilization.
+Reduced idle time.
+Improved throughput and response time
+
+Q3. Memory Bottleneck Debugging
+Memory usage:
+Code = 5 MB
+Heap = 150 MB
+Stack = 25 × 1 MB = 25 MB
+Total = 180 MB
+
+Issue:
+Too many threads increase stack usage and page faults, reducing performance.
+
+Optimizations:
+Reduce the number of threads or use a thread pool.
+Reduce stack size or optimize memory allocation.
+
+Result
+Fewer page faults.
+Faster execution.
+Better memory utilization.
+
+Q4. Starvation Debugging
+Root cause:
+P5 is in Q3 (lowest priority).
+Higher-priority queues (Q1 and Q2) keep getting CPU time.
+P5 never gets executed (Starvation).
+
+Optimization:
+Use Aging to gradually increase the priority of waiting processes.
+This ensures fairness and prevents starvation.
+
+Result
+Fair CPU allocation.
+No starvation.
+Improved response for all processes.
+
+Q5. Context-Switch Overhead Debugging
+Why context switching is high:
+Very small time quantum (1 ms) causes frequent preemption.
+High I/O frequency also increases context switches.
+
+Optimizations:
+Increase the time quantum (e.g., 5–10 ms).
+Reduce unnecessary preemption and improve I/O scheduling (or batch I/O operations)
+
+Result
+Lower context-switch overhead.
+Better CPU performance.
+Increased system throughput.
