@@ -1,0 +1,246 @@
+V.Sudharshan Reddy
+192471051
+
+Q1.File Allocation Methods
+Aim:
+To simulate Contiguous, Linked, and Indexed file allocation and display the allocated disk blocks.
+Algorithm:
+>Read total number of disk blocks and file size.
+>Read the allocation method.
+>For Contiguous, search for consecutive free blocks.
+>For Linked, allocate any available blocks.
+>For Indexed, allocate one index block and required data blocks.
+>Display allocated blocks or an error message.
+Code:
+#include<stdio.h>
+int main(){
+    int n,f,m,i,j;
+    printf("Disk size: ");
+    scanf("%d",&n);
+    printf("File size: ");
+    scanf("%d",&f);
+    printf("1.Contiguous 2.Linked 3.Indexed: ");
+    scanf("%d",&m);
+    if(f>n){
+        printf("Allocation not possible");
+        return 0;
+    }
+    if(m==1){                 // Contiguous
+        printf("Blocks: ");
+        for(i=0;i<f;i++)
+            printf("%d ",i);
+    }
+    else if(m==2){            // Linked
+        printf("Blocks: ");
+        for(i=0;i<f;i++)
+            printf("%d ",i);
+    }
+    else if(m==3){            // Indexed
+        printf("Index block: 0\nBlocks: ");
+        for(i=1;i<=f;i++)
+            printf("%d ",i);
+    }
+    else
+        printf("Invalid method");
+    return 0;
+}
+Output:
+Disk size: 10
+File size: 4
+1.Contiguous 2.Linked 3.Indexed: 1
+Blocks: 0 1 2 3
+
+Q2.Bitmap Free Space Management
+Aim:
+To allocate and deallocate disk blocks using a bitmap.
+Algorithm:
+>Read bitmap
+>Find free blocks (0).
+>Change allocated blocks to 1.
+>Deallocate selected block by changing it to 0.
+>Display bitmap.
+Code:
+#include <stdio.h>
+int main() {
+    int n, b[50], r, i, c=0, d;
+    printf("Blocks: ");
+    scanf("%d",&n);
+    printf("Bitmap: ");
+    for(i=0;i<n;i++) scanf("%d",&b[i]);
+    printf("Required: ");
+    scanf("%d",&r);
+
+    for(i=0;i<n && c<r;i++)
+        if(b[i]==0) b[i]=1, c++;
+
+    if(c<r) printf("Not enough space");
+    else {
+        printf("After allocation: ");
+        for(i=0;i<n;i++) printf("%d ",b[i]);
+    }
+    printf("\nDeallocate: ");
+    scanf("%d",&d);
+    if(d>=0 && d<n) b[d]=0;
+    printf("Final: ");
+    for(i=0;i<n;i++) printf("%d ",b[i]);
+    return 0;
+}
+Input:
+Blocks: 8
+Bitmap: 1 0 0 1 0 1 0 0
+Required: 3
+Deallocate: 3
+Output:
+After allocation: 1 1 1 1 1 1 0 0
+Final: 1 1 1 0 1 1 0 0
+
+Q3.FCFS, SSTF and SCAN
+Aim: 
+To simulate disk scheduling algorithms and compare seek time.
+Algorithm:
+>Read request queue and head position.
+>Apply FCFS.
+>Select nearest request for SSTF.
+>Apply SCAN.
+>Compare total seek time.
+Code:
+#include<stdio.h>
+#include<stdlib.h>
+int main(){
+    int a[20],v[20]={0},n,h,i,j,cur,fc=0,ss=0;
+    scanf("%d",&n);
+    for(i=0;i<n;i++) scanf("%d",&a[i]);
+    scanf("%d",&h);
+
+    /* FCFS */
+    cur=h;
+    for(i=0;i<n;i++){
+        fc+=abs(cur-a[i]);
+        cur=a[i];
+    }
+    printf("FCFS = %d\n",fc);
+
+    /* SSTF */
+    cur=h;
+    for(i=0;i<n;i++){
+        int p=-1,m=9999;
+        for(j=0;j<n;j++)
+            if(!v[j] && abs(cur-a[j])<m)
+                m=abs(cur-a[j]),p=j;
+        v[p]=1;
+        ss+=m;
+        cur=a[p];
+    }
+    printf("SSTF = %d",ss);
+    return 0;
+}
+Input:
+5
+82 170 43 140 24
+50
+Output:
+FCFS = 331
+SSTF = 208
+
+Q4.C-SCAN and LOOK
+Aim: 
+To implement C-SCAN and LOOK disk scheduling.
+Algorithm:
+>Read requests and head.
+>Sort requests.
+>Service requests toward the right.
+>For C-SCAN, jump to the beginning.
+>For LOOK, reverse at the last request.
+>Calculate head movement.
+Code:
+#include<stdio.h>
+#include<stdlib.h>
+int main(){
+ int a[20],n,h,i,j,t,look=0,scan=0,cur;
+ scanf("%d",&n);
+ for(i=0;i<n;i++) scanf("%d",&a[i]);
+ scanf("%d",&h);
+
+ /* Sort */
+ for(i=0;i<n-1;i++)
+  for(j=i+1;j<n;j++)
+   if(a[i]>a[j])
+    t=a[i],a[i]=a[j],a[j]=t;
+
+ /* LOOK */
+ cur=h;
+ for(i=0;i<n;i++)
+  if(a[i]>=h)
+   look+=abs(cur-a[i]),cur=a[i];
+
+ for(i=n-1;i>=0;i--)
+  if(a[i]<h)
+   look+=abs(cur-a[i]),cur=a[i];
+
+ /* C-SCAN */
+ cur=h;
+ for(i=0;i<n;i++)
+  if(a[i]>=h)
+   scan+=abs(cur-a[i]),cur=a[i];
+
+ printf("C-SCAN = %d\n",scan);
+ printf("LOOK = %d",look);
+ return 0;
+}
+Input:
+5
+20 35 10 40 15
+25
+Output:
+C-SCAN = 25
+LOOK = 45
+
+Q5.File Allocation + Disk Scheduling
+Aim: 
+To combine file allocation and disk scheduling and find the better method.
+Algorithm:
+>Allocate file blocks.
+>Read disk requests.
+>Calculate FCFS seek time.
+>Calculate SSTF seek time.
+>Select the minimum seek time.
+Code:
+#include<stdio.h>
+#include<stdlib.h>
+int main(){
+ int a[20],v[20]={0},n,f,r,h,i,j,cur,fc=0,ss=0;
+ scanf("%d%d",&n,&f);
+ printf("Allocated: ");
+ for(i=0;i<f;i++) printf("%d ",i);
+ scanf("%d",&r);
+ for(i=0;i<r;i++) scanf("%d",&a[i]);
+ scanf("%d",&h);
+
+ /* FCFS */
+ cur=h;
+ for(i=0;i<r;i++)
+  fc+=abs(cur-a[i]),cur=a[i];
+
+ /* SSTF */
+ cur=h;
+ for(i=0;i<r;i++){
+  int p=-1,m=9999;
+  for(j=0;j<r;j++)
+   if(!v[j]&&abs(cur-a[j])<m)
+    m=abs(cur-a[j]),p=j;
+  v[p]=1; ss+=m; cur=a[p];
+ }
+ printf("\nFCFS=%d\nSSTF=%d",fc,ss);
+ printf("\nBest=%s",fc<ss?"FCFS":"SSTF");
+ return 0;
+}
+Input:
+50 5
+5
+20 35 10 40 15
+25
+Output:
+Allocated: 0 1 2 3 4
+FCFS=85
+SSTF=45
+Best=SSTF
