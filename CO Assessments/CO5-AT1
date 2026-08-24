@@ -1,0 +1,194 @@
+V.Sudharshan Reddy
+192471051
+
+Answer 1.Optimized Linux File System Layout for a 50 GB Server
+Problem Understanding
+>The server has only 50 GB storage and must manage:
+>Rapidly growing system logs
+>User files
+>Application data
+>Log files must not exceed 10 GB
+>Critical services should not stop due to disk space exhaustion
+    Therefore, logs should be isolated from other important system files.
+Constraint Analysis
+The important constraints are:
+>Total storage = 50 GB
+>Logs ≤ 10 GB
+>User and application data need separate space.
+>Root file system must not become full.
+>Storage should be flexible for future growth.
+Solution Development
+A suitable layout is:
+ Partition / Logical Volume       Size           Purpose
+ /boot                            1 GB        Boot files and kernel
+ /                                8 GB        Operating system and system files
+ /var/log                         10 GB       System and application logs
+ /home                            10 GB       User files
+ /opt or /srv                     12 GB       Application data
+ Swap                             4 GB        Virtual memory
+ Free space / LVM pool            5 GB        Future expansion
+                         Total = 50 GB
+Use LVM (Logical Volume Manager) so that logical volumes can be resized if storage requirements change.
+Justification:
+By allocating a separate 10 GB /var/log partition, logs can never consume space allocated to critical operating system files.
+Even if excessive logs are generated, the root file system and applications continue operating. LVM also allows unused space to be assigned later where required.
+
+Answer 2.Kernel-Level Optimization for High CPU Workload
+Problem Understanding
+>The Linux system experiences:
+>High CPU workload
+>Frequent context switching
+>Performance delays
+>No hardware upgrade is possible
+>Real-time processing must be supported
+  Therefore, the solution must reduce unnecessary scheduling overhead using software and kernel-level techniques.
+Constraint Analysis
+Priority of constraints:
+>Real-time tasks must receive quick CPU access.
+>Context switching should be reduced.
+>Critical processes must not be delayed.
+>No additional hardware can be used.
+Solution Development
+1. Identify Context Switching
+Use:
+<>Bash
+vmstat 1
+and:
+<>Bash
+pidstat -w 1
+These commands help identify excessive context switching.
+
+2. Set CPU Affinity
+Assign important processes to specific CPU cores:
+<>Bash
+taskset -c 0,1 ./realtime_process
+This reduces unnecessary migration between CPUs.
+
+3. Use Real-Time Scheduling
+For a critical process:
+<>Bash
+chrt -f 50 ./realtime_process
+This uses the SCHED_FIFO real-time scheduling policy.
+
+4. Adjust Process Priority
+Use:
+Bash
+nice -n 10 process
+Lower-priority background tasks can be given less CPU preference.
+For higher priority, appropriate administrative control can be used.
+
+5. Kernel Modules
+A lightweight kernel module can be used when specialized functionality requires direct kernel interaction. Modules should be carefully tested because poorly designed modules can affect system stability.
+Justification:
+CPU affinity reduces CPU migration, while real-time scheduling ensures that important tasks receive CPU time immediately. Lowering the priority of non-critical tasks reduces competition for CPU resources.
+
+Answer 3.Processing 1 Million Log Entries Within 2 Minutes Using Shell Scripting
+Problem Understanding
+The administrator must:
+>Process 1 million log entries per day
+>Use only shell scripting
+>Complete processing within 2 minutes
+>Use efficient Linux commands
+  The main requirement is to minimize unnecessary process creation and disk I/O.
+Constraint Analysis
+Important constraints:
+>Large input size: 1,000,000 records.
+>Execution time must be below 120 seconds.
+>Only shell commands/scripts can be used.
+>Commands must efficiently filter and summarize data.
+Solution Development
+An efficient approach is to use a single awk command instead of multiple grep, cut, and sort processes.
+Example:
+#!/bin/bash
+awk '
+{
+    count[$5]++
+}
+END {
+    for (x in count)
+        print x, count[x]
+}' logfile.txt > result.txt
+Justification:
+Using a pipeline such as:
+Bash
+cat logfile | grep ERROR | awk ...
+creates unnecessary processes. A single awk program reduces process creation, context switching, and repeated file scanning.
+
+Answer 4.Managing a Faulty Process Consuming 90% CPU
+Problem Understanding
+A Linux system has:
+>Multiple background services
+>One faulty process consuming 90% CPU
+>Critical services must remain unaffected
+>The system cannot be restarted
+>The faulty process must be identified and controlled safely.
+Constraint Analysis
+The priorities are:
+>Identify the correct process.
+>Avoid affecting critical services.
+>Reduce CPU usage immediately.
+>Restart only the faulty service if necessary.
+>Avoid restarting the entire system.
+Solution Development
+Step 1: Identify High CPU Process
+Use:
+<>Bash
+top
+Step 2: Monitor the Process
+For a process with PID 1234:
+<>Bash
+top -p 1234
+Step 3: Reduce Its Priority
+<>Bash
+renice +10 -p 1234
+This gives CPU preference to more important processes.
+Step 4: Limit CPU Usage
+Use systemd resource control for managed services, for example by configuring CPU limits for the service. If the process is not critical, CPU usage can also be controlled using cgroups or other appropriate process-control mechanisms.
+Step 5: Gracefully Stop the Process
+First:
+<>Bash
+kill -TERM 1234
+If it does not respond:
+<>Bash
+kill -KILL 1234
+SIGTERM should be attempted first because it allows the process to close files and release resources.
+Justification
+The process is first identified and monitored before any action is taken. Reducing its priority or limiting its CPU usage protects critical services. Only if the process remains faulty is it terminated or restarted.
+
+Answer 5.Resource Allocation for 5 Virtual Machines with 16 GB RAM
+Problem Understanding
+Available physical RAM:
+16 GB
+Requirements:
+Host OS = 4 GB
+5 VMs
+Each VM requires at least 2 GB
+Required memory:
+5×2=10 GB
+Total minimum requirement:
+10+4=14 GB
+Available memory:
+16−14=2 GB remaining
+Therefore, all five VMs can run, but memory must be allocated carefully.
+Constraint Analysis
+Priority:
+>Host OS must receive 4 GB.
+>Every VM must receive at least 2 GB.
+>Total allocation should not exceed available RAM.
+>Some memory must remain available for temporary workload variation.
+>Excessive memory overcommitment should be avoided.
+Solution Development
+A suitable allocation is:
+   System             RAM Allocation
+   Host OS            4 GB
+   VM 1               2 GB
+   VM 2               2 GB
+   VM 3               2 GB
+   VM 4               2 GB
+   VM 5               2 GB
+   Remaining          2 GB
+   Total              16 GB
+The remaining 2 GB can be used as a memory buffer for the host and virtualization overhead.
+Justification:
+The minimum requirement is 14 GB, leaving only 2 GB free. Therefore, allocating more than 2 GB permanently to every VM could cause memory pressure. 
+Giving each VM its guaranteed minimum while keeping 2 GB available for the host and virtualization overhead provides the safest configuration.
