@@ -1,0 +1,74 @@
+V.Sudharshan Reddy
+192471051
+
+Answer 1:File System Space Management
+BEGIN
+SET threshold = 80
+usage = GET_DISK_USAGE()
+IF usage > threshold THEN
+    IDENTIFY log_files SORTED BY size DESC
+    FOR each file IN log_files DO
+        COMPRESS or DELETE file
+        usage = GET_DISK_USAGE()
+        IF usage <= threshold THEN
+            BREAK
+        ENDIF
+    ENDFOR
+ENDIF
+END
+
+Answer 2:Priority-Based CPU Scheduling
+BEGIN
+INPUT process_list
+SORT process_list BY priority (highest first)
+WHILE process_list NOT EMPTY DO
+    SELECT process WITH highest priority
+    ALLOCATE CPU time
+    EXECUTE process
+    IF process NOT completed THEN
+        REDUCE priority slightly
+        ADD process back to process_list
+    ENDIF
+ENDWHILE
+END
+
+Answer 3:RAM Management for Virtual Machines
+BEGIN
+total_RAM = 16 GB
+host_reserved = 4 GB
+available_RAM = total_RAM - host_reserved
+INPUT number_of_VMs
+min_RAM = 2 GB
+FOR i = 1 TO number_of_VMs DO
+    IF available_RAM >= min_RAM THEN
+        ALLOCATE min_RAM TO VM[i]
+        available_RAM = available_RAM - min_RAM
+    ELSE
+        PRINT "Insufficient memory"
+    ENDIF
+ENDFOR
+END
+
+Answer 4:Hypervisor Selection
+BEGIN
+INPUT performance_required, budget, hardware_access
+IF performance_required = HIGH AND hardware_access = TRUE THEN
+    SELECT Type_1_Hypervisor
+ELSE IF budget = LOW THEN
+    SELECT Type_2_Hypervisor
+ELSE
+    SELECT Type_1_Hypervisor
+ENDIF
+PRINT selected_hypervisor
+END
+
+Answer 5:CPU and Memory Resource Limiting
+BEGIN
+INPUT application_list
+FOR each app IN application_list DO
+    CREATE cgroup FOR app
+    SET CPU limit
+    SET memory limit
+    ASSIGN app process TO cgroup
+ENDFOR
+END
